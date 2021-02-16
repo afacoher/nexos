@@ -19,6 +19,7 @@
                     });
                 }
             });
+
             $.ajax({
                 url: "http://localhost:8090/credibanco/api/book/getAll",
                 type: 'GET',
@@ -26,10 +27,23 @@
                 success: function(response) {
                     console.log(response);
                     $.each(response, function (i, item) {
-                        $('#libroTitulo').append('<option value=' + item.title +'>' + item.title + '</option>');
+                        $('#titulo').append('<option value=' + item.title +'>' + item.title + '</option>');
                     });
                 }
             });
+
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/book/getAll",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    $.each(response, function (i, item) {
+                        $('#anio').append('<option value=' + item.year +'>' + item.year + '</option>');
+                    });
+                }
+            });
+
             $.ajax({
                 url: "http://localhost:8090/credibanco/api/editorial/getAll",
                 type: 'GET',
@@ -37,18 +51,16 @@
                 success: function(response) {
                     console.log(response);
                     $.each(response, function (i, item) {
-                        $('#libroEditorial').append('<option value=' + item.idEditorial +'>' + item.nameEditorial + '</option>');
+                        $('#idEditorial').append('<option value=' + item.idEditorial +'>' + item.nameEditorial + '</option>');
                     });
                 }
             });
         });
-        $("button[name='getAllLibros']").click(function(){
+
+        $("button[name='getAllByAuthor']").click(function(){
+            $("#records_table_autor td").remove();
             $.ajax({
-                url: "http://localhost:8090/credibanco/api/book/getAllByAuthor",
-
-
-                //data: $( "#idAutor" ).val(),
-                data: $( "#idAutor" ).attr("selected", true),
+                url: "http://localhost:8090/credibanco/api/book/getAllByAuthor/" + $('#idAutor').val(),
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -57,21 +69,56 @@
                     $.each(response, function (i, item) {
                         trHTML += '<tr><td>' + item.title + '</td><td>' + item.year + '</td><td>' + item.gender + '</td><td>' + item.numPages + '</td><td>' + item.authorBook.nameAuthor + '</td><td>' + item.editorialBook.nameEditorial + '</td></tr>';
                     });
-                    $('#records_table_libro').append(trHTML);
+                    $('#records_table_autor').append(trHTML);
                 }
             });
         });
 
-        $("button[name='getAllEditoriales']").click(function(){
+        $("button[name='getAllByTitle']").click(function(){
+            $("#records_table_titulo td").remove();
             $.ajax({
-                url: "http://localhost:8090/credibanco/api/editorial/getAll",
+                url: "http://localhost:8090/credibanco/api/book/getAllByTitle/" + $("#titulo option:selected").text(),
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
                     console.log(response);
                     var trHTML = '';
                     $.each(response, function (i, item) {
-                        trHTML += '<tr><td>' + item.nameEditorial + '</td><td>' + item.address + '</td><td>' + item.phone + '</td><td>' + item.emailEditorial + '</td></tr>';
+                        trHTML += '<tr><td>' + item.title + '</td><td>' + item.year + '</td><td>' + item.gender + '</td><td>' + item.numPages + '</td><td>' + item.authorBook.nameAuthor + '</td><td>' + item.editorialBook.nameEditorial + '</td></tr>';
+                    });
+                    $('#records_table_titulo').append(trHTML);
+                }
+            });
+        });
+
+        $("button[name='getAllByYear']").click(function(){
+            $("#records_table_anio td").remove();
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/book/getAllByYear/" + $('#anio').val(),
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    var trHTML = '';
+                    $.each(response, function (i, item) {
+                        trHTML += '<tr><td>' + item.title + '</td><td>' + item.year + '</td><td>' + item.gender + '</td><td>' + item.numPages + '</td><td>' + item.authorBook.nameAuthor + '</td><td>' + item.editorialBook.nameEditorial + '</td></tr>';
+                    });
+                    $('#records_table_anio').append(trHTML);
+                }
+            });
+        });
+
+        $("button[name='getAllByIDEditorial']").click(function(){
+            $("#records_table_editorial td").remove();
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/book/getAllByIDEditorial/" + $('#idEditorial').val(),
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    var trHTML = '';
+                    $.each(response, function (i, item) {
+                        trHTML += '<tr><td>' + item.title + '</td><td>' + item.year + '</td><td>' + item.gender + '</td><td>' + item.numPages + '</td><td>' + item.authorBook.nameAuthor + '</td><td>' + item.editorialBook.nameEditorial + '</td></tr>';
                     });
                     $('#records_table_editorial').append(trHTML);
                 }
@@ -88,43 +135,66 @@
         <label for="idAutor">Seleccione uno:</label>
         <select id="idAutor">
         </select>
-        <button name="getAllLibros">Buscar - Libros/getAll</button>
+        <button name="getAllByAuthor">Buscar - Autor/getAll</button>
         <table id="records_table_autor" border='1'>
-            <tr>
-                <th>Código</th>
-                <th>Autor</th>
-            </tr>
-        </table>
-    </div>
-    <div>
-        <p>Buscar libro por "Titulo"</p>
-        <label for="libroTitulo">Seleccione uno:</label>
-        <select id="libroTitulo">
-        </select>
-        <button name="getAllTitulos">Buscar - Titulos/getAll</button>
-        <table id="records_table_libro" border='1'>
             <tr>
                 <th>Titulo</th>
                 <th>Año</th>
                 <th>Genero</th>
                 <th>N° Páginas</th>
-                <th>Código autor</th>
-                <th>Código editorial</th>
+                <th>Autor</th>
+                <th>Editorial</th>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <p>Buscar libro por "Titulo"</p>
+        <label for="titulo">Seleccione uno:</label>
+        <select id="titulo">
+        </select>
+        <button name="getAllByTitle">Buscar - Titulo/getAll</button>
+        <table id="records_table_titulo" border='1'>
+            <tr>
+                <th>Titulo</th>
+                <th>Año</th>
+                <th>Genero</th>
+                <th>N° Páginas</th>
+                <th>Autor</th>
+                <th>Editorial</th>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <p>Buscar libro por "Año"</p>
+        <label for="anio">Seleccione uno:</label>
+        <select id="anio">
+        </select>
+        <button name="getAllByYear">Buscar - Año/getAll</button>
+        <table id="records_table_anio" border='1'>
+            <tr>
+                <th>Titulo</th>
+                <th>Año</th>
+                <th>Genero</th>
+                <th>N° Páginas</th>
+                <th>Autor</th>
+                <th>Editorial</th>
             </tr>
         </table>
     </div>
     <div>
         <p>Buscar libro por "Editorial"</p>
-        <label for="libroEditorial">Seleccione uno:</label>
-        <select id="libroEditorial">
+        <label for="idEditorial">Seleccione uno:</label>
+        <select id="idEditorial">
         </select>
-        <button name="getAllEditoriales">Buscar - Editoriales/getAll</button>
+        <button name="getAllByIDEditorial">Buscar - Editorial/getAll</button>
         <table id="records_table_editorial" border='1'>
             <tr>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Teléfono</th>
-                <th>Correo electrónico</th>
+                <th>Titulo</th>
+                <th>Año</th>
+                <th>Genero</th>
+                <th>N° Páginas</th>
+                <th>Autor</th>
+                <th>Editorial</th>
             </tr>
         </table>
     </div>

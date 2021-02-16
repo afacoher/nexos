@@ -13,7 +13,7 @@ public class CredibancoApplication {
 		SpringApplication.run(CredibancoApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
@@ -21,6 +21,6 @@ public class CredibancoApplication {
 				registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST","PUT", "DELETE");
 			}
 		};
-	}
+	}*/
 
 }

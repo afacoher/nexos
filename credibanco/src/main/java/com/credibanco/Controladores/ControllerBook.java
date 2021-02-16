@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}, maxAge = 7200)
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET}, maxAge = 7200)
 public class ControllerBook {
     @Autowired
     private ServicioDTOBook servicioDTOBook;
