@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/author")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET}, maxAge = 7200)
 public class ControllerAuthor {
     @Autowired
     private ServicioDTOAuthor servicioDTOAuthor;

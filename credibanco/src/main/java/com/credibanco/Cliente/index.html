@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CREDIBANCO - Cliente</title>
+    <script src="Resource/jquery_v3.5.1.js"> </script>
+    <script>
+    $(document).ready(function(){
+        $( window ).on( "load", function() {
+            alert('CREDIBANCO - Cliente API');
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/author/getAll",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    $.each(response, function (i, item) {
+                        $('#idAutor').append('<option value=' + item.idAuthor +'>' + item.nameAuthor + '</option>');
+                    });
+                }
+            });
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/book/getAll",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    $.each(response, function (i, item) {
+                        $('#libroTitulo').append('<option value=' + item.title +'>' + item.title + '</option>');
+                    });
+                }
+            });
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/editorial/getAll",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    $.each(response, function (i, item) {
+                        $('#libroEditorial').append('<option value=' + item.idEditorial +'>' + item.nameEditorial + '</option>');
+                    });
+                }
+            });
+        });
+        $("button[name='getAllLibros']").click(function(){
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/book/getAllByAuthor",
+
+
+                //data: $( "#idAutor" ).val(),
+                data: $( "#idAutor" ).attr("selected", true),
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    var trHTML = '';
+                    $.each(response, function (i, item) {
+                        trHTML += '<tr><td>' + item.title + '</td><td>' + item.year + '</td><td>' + item.gender + '</td><td>' + item.numPages + '</td><td>' + item.authorBook.nameAuthor + '</td><td>' + item.editorialBook.nameEditorial + '</td></tr>';
+                    });
+                    $('#records_table_libro').append(trHTML);
+                }
+            });
+        });
+
+        $("button[name='getAllEditoriales']").click(function(){
+            $.ajax({
+                url: "http://localhost:8090/credibanco/api/editorial/getAll",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    var trHTML = '';
+                    $.each(response, function (i, item) {
+                        trHTML += '<tr><td>' + item.nameEditorial + '</td><td>' + item.address + '</td><td>' + item.phone + '</td><td>' + item.emailEditorial + '</td></tr>';
+                    });
+                    $('#records_table_editorial').append(trHTML);
+                }
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+<div>
+    <h1>CREDIBANCO - Cliente API</h1>
+    <div>
+        <p>Buscar libro por "Autor"</p>
+        <label for="idAutor">Seleccione uno:</label>
+        <select id="idAutor">
+        </select>
+        <button name="getAllLibros">Buscar - Libros/getAll</button>
+        <table id="records_table_autor" border='1'>
+            <tr>
+                <th>Código</th>
+                <th>Autor</th>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <p>Buscar libro por "Titulo"</p>
+        <label for="libroTitulo">Seleccione uno:</label>
+        <select id="libroTitulo">
+        </select>
+        <button name="getAllTitulos">Buscar - Titulos/getAll</button>
+        <table id="records_table_libro" border='1'>
+            <tr>
+                <th>Titulo</th>
+                <th>Año</th>
+                <th>Genero</th>
+                <th>N° Páginas</th>
+                <th>Código autor</th>
+                <th>Código editorial</th>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <p>Buscar libro por "Editorial"</p>
+        <label for="libroEditorial">Seleccione uno:</label>
+        <select id="libroEditorial">
+        </select>
+        <button name="getAllEditoriales">Buscar - Editoriales/getAll</button>
+        <table id="records_table_editorial" border='1'>
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Correo electrónico</th>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import com.credibanco.Excepciones.ExcepcionesDTOBook;
 import com.credibanco.Servicios.ServicioDTOBook;
 import com.credibanco.Servicios.ServicioDTOEditorial;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.AccessType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}, maxAge = 7200)
 public class ControllerBook {
     @Autowired
     private ServicioDTOBook servicioDTOBook;
@@ -29,38 +31,22 @@ public class ControllerBook {
 
     @GetMapping("/getAllByAuthor/{id}")
     public ResponseEntity<List<DTOBook>> getAllByAuthor(@PathVariable("id") Long idAuthor){
-        if(servicioDTOBook.getAllByAuthor(idAuthor).isEmpty()){
-            return new ResponseEntity<>(servicioDTOBook.getAllByAuthor(idAuthor), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(servicioDTOBook.getAllByAuthor(idAuthor), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(servicioDTOBook.getAllByAuthor(idAuthor), HttpStatus.OK);
     }
 
     @GetMapping("/getAllByIDEditorial/{id}")
     public ResponseEntity<List<DTOBook>> getAllByIDEditorial(@PathVariable("id")Long idEditorial){
-        if(servicioDTOBook.getAllByIDEditorial(idEditorial).isEmpty()){
-            return new ResponseEntity<>(servicioDTOBook.getAllByIDEditorial(idEditorial), HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(servicioDTOBook.getAllByIDEditorial(idEditorial), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(servicioDTOBook.getAllByIDEditorial(idEditorial), HttpStatus.OK);
     }
 
     @GetMapping("/getAllByTitle/{title}")
     public ResponseEntity<List<DTOBook>> getAllByTitle(@PathVariable("title")String title){
-        if(servicioDTOBook.getAllByTitle(title).isEmpty()){
-            return new ResponseEntity<>(servicioDTOBook.getAllByTitle(title), HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(servicioDTOBook.getAllByTitle(title), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(servicioDTOBook.getAllByTitle(title), HttpStatus.OK);
     }
 
     @GetMapping("/getAllByYear/{year}")
     public ResponseEntity<List<DTOBook>> getAllByYear(@PathVariable("year")Long year){
-        if(servicioDTOBook.getAllByYear(year).isEmpty()){
-            return new ResponseEntity<>(servicioDTOBook.getAllByYear(year), HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(servicioDTOBook.getAllByYear(year), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(servicioDTOBook.getAllByYear(year), HttpStatus.OK);
     }
 
     @PostMapping("/save")
